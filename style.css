@@ -7,11 +7,12 @@ body {
   text-align: center;
 }
 
-#space_ship {
+#spaceShip {
   width: 100px;
   height: 100px;
   background: violet;
-  border: 5px solid black;
+  border: 5px dotted white;
+  border-radius: 99em;
 
   position: absolute;
   bottom: 0;
