@@ -1,28 +1,35 @@
 $(function() {
   console.log('dom loaded');
+
   var $asteroid = $('.asteroid');
-  // setInterval(moveAsteroid, 300);
+  var direction = true;
+  var $leftBorder = $asteroid.position().left;
+  // debugger
+  var $rightBorder = window.innerWidth - 50;
 
-// Functions ------------------->>>>
+  if ($('body').is('.gamePage')) setInterval(moveAsteroid, 1);
+
+// <<<<------------------- Functions ------------------->>>>
   function moveAsteroid() {
+// debugger
 
-    $asteroid.css({
-      "position": "absolute",
-      "left": "+=30px",
-    })
+    if (direction) {
+      $asteroid.css("left", "+=1px");
+    } else {
+      $asteroid.css("left", "-=1px");
+    }
 
     isCorner();
-    // console.log('just moved!');
   }
 
   function isCorner() {
-    if ($asteroid.css('left') >= window.innerWidth) {
-      $asteroid.css('left', '0');
-      console.log('STOPPPED');
+    // find position of asteroid in number (not pixels) to compare with window.innerWidth
+    var $asteroidPosition = $asteroid.css('left').match(/[0-9]+/);
+    if ($asteroidPosition >= $rightBorder || $asteroidPosition <= $leftBorder) {
+      // update boolean value to signal change in direction in moveAsteroid()
+      direction = !direction;
+      console.log('CHANGING DIRECTIONS!');
     }
-
-    console.log('isCorner called!  left:', $asteroid.css('left'));
-      // else if ()
   }
 });
 

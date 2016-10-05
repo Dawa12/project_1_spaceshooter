@@ -26,5 +26,5 @@ body {
   background: yellow;
   margin: 5px;
   border-radius: 50px;
-
+  position: absolute;
 }
