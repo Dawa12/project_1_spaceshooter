@@ -1,3 +1,30 @@
 body {
   background: lightblue;
+
+}
+
+.page_title {
+  text-align: center;
+}
+
+#space_ship {
+  width: 100px;
+  height: 100px;
+  background: violet;
+  border: 5px solid black;
+
+  position: absolute;
+  bottom: 0;
+  left: 45%;
+
+  /*margin: 0 auto;*/
+}
+
+.asteroid {
+  height: 40px;
+  width: 40px;
+  background: yellow;
+  margin: 5px;
+  border-radius: 50px;
+
 }
