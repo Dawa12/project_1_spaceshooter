@@ -5,6 +5,7 @@ $(function() {
 
     var $spaceShip = $('#spaceShip');
     $gun = $('#gun');
+    $bullet = $('.bullet');
 
     // Asteroid coordination
     var $asteroid = $('.asteroid');
@@ -13,7 +14,8 @@ $(function() {
     var $rightBorder = window.innerWidth - 50;
     var $asteroidPosition = $asteroid.css('left');
 
-    setInterval(moveAsteroid, 50);
+    var interval = setInterval(moveAsteroid, 50);
+    var intervalRunning = true;
   };
 
 // <<<<------------------- Functions ------------------->>>>
@@ -23,7 +25,8 @@ $(function() {
 
   $gun.offset({top: 600});
 
-  debugger
+  // debugger
+
 
   function isCorner() {
     // using parseFloat to remove 'px' from $asteroidPosition for comparison with borders
@@ -71,6 +74,12 @@ $(function() {
         return upMove();
       case 40:
         return downMove();
+      case 32:
+        return shoot();
+
+      // logic to start / stop interval upon hitting 'k'
+      case 75:
+        return changeInterval();
     }
   });
 
@@ -93,6 +102,22 @@ $(function() {
     $spaceShip.animate({top: '+=25px'}, 50, 'linear');
     console.log('moved down');
   }
+
+  function changeInterval() {
+    // fails after 2 changes even though interval Running does change accurately. Set Interval should be inside a function?
+    
+    console.log('before execution intervalRunning is: ' + intervalRunning);
+    intervalRunning ? clearInterval(interval) : setInterval(moveAsteroid, 50);
+    intervalRunning = !intervalRunning;
+  }
+
+  function shoot() {
+    // setInterval(($bullet.animate({top: '-=25px'}, 50, 'linear')), 2000);
+    console.log('shooting!');
+  }
+
+
+
 });
 
 
