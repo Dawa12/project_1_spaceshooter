@@ -105,23 +105,35 @@ $(function() {
 
   function changeInterval() {
     // fails after 2 changes even though interval Running does change accurately. Set Interval should be inside a function?
-    
+
     console.log('before execution intervalRunning is: ' + intervalRunning);
     intervalRunning ? clearInterval(interval) : setInterval(moveAsteroid, 50);
     intervalRunning = !intervalRunning;
   }
 
   function shoot() {
-    // setInterval(($bullet.animate({top: '-=25px'}, 50, 'linear')), 2000);
+    // $bullet.animate({top: '-=20px'}, 50, 'linear');
+
+    setInterval(shootBullet, 100);
+      function shootBullet() {
+        $bullet.animate({top: '-=25px'}, 50, 'linear')
+      }
     console.log('shooting!');
+
+    nextBullet();
   }
+
+  function nextBullet() {
+    $('#gun').append($('<div>').addClass('bullet'));
+  }
+
 
 
 
 });
 
 
-
+1
 
 
 
