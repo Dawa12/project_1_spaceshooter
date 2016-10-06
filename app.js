@@ -2,62 +2,62 @@ $(function() {
   console.log('dom loaded');
 
   if ($('body').is('.gamePage')) {
+
     var $spaceShip = $('#spaceShip');
-    var $asteroid = $('.asteroid');
+    $gun = $('#gun');
 
     // Asteroid coordination
-    var direction = true;
+    var $asteroid = $('.asteroid');
+    var isMovingRight = true;
     var $leftBorder = 0;
     var $rightBorder = window.innerWidth - 50;
     var $asteroidPosition = $asteroid.css('left');
+
     setInterval(moveAsteroid, 50);
   };
 
 // <<<<------------------- Functions ------------------->>>>
 
+
+
+
+  $gun.offset({top: 600});
+
+  debugger
+
   function isCorner() {
     // using parseFloat to remove 'px' from $asteroidPosition for comparison with borders
       if (parseFloat($asteroidPosition) > $rightBorder || parseFloat($asteroidPosition) <= $leftBorder) {
-        console.log('TRUE! corner');
         return true;
       } else {
-        console.log('FALSE! corner');
         return false;
       }
   }
 
   function changeDirections() {
     // update boolean value to signal change in direction in moveAsteroid()
-    direction = !direction;
-    console.log('CHANGING DIRECTIONS!');
+    isMovingRight = !isMovingRight;
   }
 
   function moveAsteroid() {
-    if (direction) {
+    if (isCorner()) changeDirections();
+
+    if (isMovingRight) {
       $asteroid.css("left", "+=10px");
       $asteroidPosition = $asteroid.css("left");
     } else {
       $asteroid.css("left", "-=10px");
       $asteroidPosition = $asteroid.css("left");
-  console.log($asteroidPosition);
-    }
-
-    if (isCorner()) {
-      console.log('is corner!');
-      changeDirections();
     }
   }
 
-// edge detection to prevent movement when spaceship hits edges
 
-
-
-
-
-
-
-
-
+// shoot smaller divs from spaceship
+  // find top position / location of spaceship
+  // have bullet appear from spaceship towards asteroid. Bullet partially hidden under spaceship - use z index to have asteroid over bullet
+// bullets should move towards top
+// asteroid disappers upon getting hit by bullet
+// prevent spaceship from moving outside edges
 
 
 // move spaceship commands
@@ -106,10 +106,6 @@ $(function() {
 
 
 // Goals
-
-
-
-
 // recode using OOP
 
 
