@@ -9,41 +9,37 @@ $(function() {
     var direction = true;
     var $leftBorder = 0;
     var $rightBorder = window.innerWidth - 50;
-    // find position of asteroid in number (not pixels) to compare with window.innerWidth
-    var $asteroidPosition = $asteroid.css('left').match(/[0-9]+/);
-
-    // setInterval(moveAsteroid, 1);
+    var $asteroidPosition = $asteroid.css('left');
+    setInterval(moveAsteroid, 50);
   };
 
 // <<<<------------------- Functions ------------------->>>>
 
-function isCorner() {
-// debugger
- // || $asteroidPosition <= $leftBorder
-
-  // if ($asteroidPosition > $rightBorder) {
-    if (parseInt($asteroidPosition[0]) > $rightBorder) {
-// debugger
-    console.log('TRUE! corner');
-    return true;
-  } else {
-    console.log('FALSE! corner');
-    return false;
+  function isCorner() {
+    // using parseFloat to remove 'px' from $asteroidPosition for comparison with borders
+      if (parseFloat($asteroidPosition) > $rightBorder || parseFloat($asteroidPosition) <= $leftBorder) {
+        console.log('TRUE! corner');
+        return true;
+      } else {
+        console.log('FALSE! corner');
+        return false;
+      }
   }
-}
 
-function changeDirections() {
-  // update boolean value to signal change in direction in moveAsteroid()
-  direction = !direction;
-  console.log('CHANGING DIRECTIONS!');
-}
+  function changeDirections() {
+    // update boolean value to signal change in direction in moveAsteroid()
+    direction = !direction;
+    console.log('CHANGING DIRECTIONS!');
+  }
 
   function moveAsteroid() {
-// debugger
     if (direction) {
-      $asteroid.css("left", "+=1px");
+      $asteroid.css("left", "+=10px");
+      $asteroidPosition = $asteroid.css("left");
     } else {
-      $asteroid.css("left", "-=1px");
+      $asteroid.css("left", "-=10px");
+      $asteroidPosition = $asteroid.css("left");
+  console.log($asteroidPosition);
     }
 
     if (isCorner()) {
@@ -51,8 +47,6 @@ function changeDirections() {
       changeDirections();
     }
   }
-
-
 
 // edge detection to prevent movement when spaceship hits edges
 
