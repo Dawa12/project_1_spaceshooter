@@ -25,9 +25,6 @@ $(function() {
 
   $gun.offset({top: 600});
 
-  // debugger
-
-
   function isCorner() {
     // using parseFloat to remove 'px' from $asteroidPosition for comparison with borders
       if (parseFloat($asteroidPosition) > $rightBorder || parseFloat($asteroidPosition) <= $leftBorder) {
@@ -61,6 +58,71 @@ $(function() {
 // bullets should move towards top
 // asteroid disappers upon getting hit by bullet
 // prevent spaceship from moving outside edges
+// shoot and move at same time - 2 keys at once
+
+
+  function changeInterval() {
+    // fails after 2 changes even though interval Running does change accurately. Set Interval should be inside a function?
+
+    console.log('before execution intervalRunning is: ' + intervalRunning);
+    intervalRunning ? clearInterval(interval) : setInterval(moveAsteroid, 50);
+    intervalRunning = !intervalRunning;
+  }
+
+  function shoot() {
+    $bullet = $('.bullet');
+
+    setInterval(shootBullet, 100);
+      function shootBullet() {
+        $bullet.animate({top: '-=25px'}, 50, 'linear');
+      }
+    console.log('shooting!');
+
+    // number of bullets not accurately reflected
+    // if any of the number of bullets < 200 then destroy all.
+    // first and second bullets always overlapped
+    // cannot use remove() to remove element from array with jquery
+
+
+    console.log('loading next bullet');
+    nextBullet();
+
+    console.log('starting destroy bullet interval');
+    setInterval(destroyBullet, 10);
+
+// debugger
+    console.log('bullet count:' + $bullet.length);
+  }
+
+  function nextBullet() {
+    $bullet = $bullet.add($('<div>').addClass('bullet'));
+// debugger
+    $('#gun').append($bullet);
+  }
+
+  function destroyBullet() {
+    if ($bullet.eq(0).offset().top < 200) {
+      var first = $bullet.eq(0);
+      $bullet.remove(first);
+
+// how to remove an element from arry in jquery?
+
+// debugger
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // move spaceship commands
@@ -103,47 +165,7 @@ $(function() {
     console.log('moved down');
   }
 
-  function changeInterval() {
-    // fails after 2 changes even though interval Running does change accurately. Set Interval should be inside a function?
-
-    console.log('before execution intervalRunning is: ' + intervalRunning);
-    intervalRunning ? clearInterval(interval) : setInterval(moveAsteroid, 50);
-    intervalRunning = !intervalRunning;
-  }
-
-  function shoot() {
-    // $bullet.animate({top: '-=20px'}, 50, 'linear');
-
-    setInterval(shootBullet, 100);
-      function shootBullet() {
-        $bullet.animate({top: '-=25px'}, 50, 'linear')
-      }
-    console.log('shooting!');
-
-    nextBullet();
-  }
-
-  function nextBullet() {
-    $('#gun').append($('<div>').addClass('bullet'));
-  }
-
-
-
-
 });
-
-
-1
-
-
-
-
-
-
-
-
-// Goals
-// recode using OOP
 
 
 
