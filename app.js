@@ -5,6 +5,7 @@ $(function() {
 
     var $spaceShip = $('#spaceShip');
     $gun = $('#gun');
+    $gun.offset({top: 600});
     $bullet = $('.bullet');
 
     // Asteroid coordination
@@ -16,14 +17,29 @@ $(function() {
 
     var interval = setInterval(moveAsteroid, 50);
     var intervalRunning = true;
+
+// debugger
   };
 
 // <<<<------------------- Functions ------------------->>>>
 
+  // offset().top + outerHeight
 
+  function isCollision(asteroid, bullet) {
+    asteroidHeightBoundary = asteroid.offset().top + asteroid.outerHeight();
+    bulletHeightBoundary = bullet.offset().top + bullet.outerHeight();
 
+    asteroidWidthBoundary = asteroid.offset().left + asteroid.outerWidth();
+    bulletWidthBoundary = bullet.offset().left + bullet.outerWidth();
+// collision()
 
-  $gun.offset({top: 600});
+  if (asteroidHeightBoundary >= bulletHeightBoundary) {
+    debugger
+  }
+
+    asteroidHeightBoundary >= bulletHeightBoundary ? console.log('COLLISSIOINONONO') : console.log('no collision');
+
+  }
 
   function isCorner() {
     // using parseFloat to remove 'px' from $asteroidPosition for comparison with borders
@@ -34,12 +50,16 @@ $(function() {
       }
   }
 
+
+
+
   function changeDirections() {
     // update boolean value to signal change in direction in moveAsteroid()
     isMovingRight = !isMovingRight;
   }
 
   function moveAsteroid() {
+    isCollision($asteroid, $bullet);
     if (isCorner()) changeDirections();
 
     if (isMovingRight) {
@@ -52,13 +72,15 @@ $(function() {
   }
 
 
-// shoot smaller divs from spaceship
-  // find top position / location of spaceship
-  // have bullet appear from spaceship towards asteroid. Bullet partially hidden under spaceship - use z index to have asteroid over bullet
-// bullets should move towards top
-// asteroid disappers upon getting hit by bullet
-// prevent spaceship from moving outside edges
-// shoot and move at same time - 2 keys at once
+// asteroid and bullet disapper upon getting hit by bullet
+  /* asteroid offset to find position always
+    - find offset at top specifically
+  - before each asteroid move - detect if it's been hit by bullet
+  - if hit, remove both asteroid and bullet
+  -
+
+
+  */
 
 
   function changeInterval() {
@@ -71,17 +93,12 @@ $(function() {
 
   function shoot() {
     $bullet = $('.bullet');
-
     setInterval(shootBullet, 100);
-      function shootBullet() {
-        $bullet.animate({top: '-=25px'}, 50, 'linear');
-      }
-    console.log('shooting!');
 
-    // number of bullets not accurately reflected
-    // if any of the number of bullets < 200 then destroy all.
-    // first and second bullets always overlapped
-    // cannot use remove() to remove element from array with jquery
+    function shootBullet() {
+      $bullet.animate({top: '-=25px'}, 50, 'linear');
+    }
+    console.log('shooting!');
 
 
     console.log('loading next bullet');
