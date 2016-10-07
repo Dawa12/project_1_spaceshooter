@@ -146,25 +146,34 @@ $(function() {
   });
 
   function leftMove() {
-    $spaceShip.animate({left: '-=25px'}, 50, 'linear');
-    console.log('moved left');
+    if ($spaceShip.offset().left >= 15) {
+      $spaceShip.animate({left: '-=25px'}, 50, 'linear');
+      console.log('moved left');
+    }
+// debuggers
   }
 
   function rightMove() {
-    $spaceShip.animate({left: '+=25px'}, 50, 'linear');
-    console.log('moved right');
+    if ($spaceShip.offset().left <= 645) {
+      $spaceShip.animate({left: '+=25px'}, 50, 'linear');
+      console.log('moved right');
+    }
   }
 
   function upMove() {
-    $spaceShip.animate({top: '-=25px'}, 50, 'linear');
-    console.log('moved up');
+    if ($spaceShip.offset().top >= 330) {
+      $spaceShip.animate({top: '-=25px'}, 50, 'linear');
+      console.log('moved up');
+    }
   }
 
   function downMove() {
-    $spaceShip.animate({top: '+=25px'}, 50, 'linear');
-    console.log('moved down');
+    if ($spaceShip.offset().top <= 560) {
+      $spaceShip.animate({top: '+=25px'}, 50, 'linear');
+      console.log('moved down');
+      console.log($spaceShip.offset().top);
+    }
   }
-
 });
 
 
