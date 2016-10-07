@@ -26,18 +26,38 @@ $(function() {
   // offset().top + outerHeight
 
   function isCollision(asteroid, bullet) {
-    asteroidHeightBoundary = asteroid.offset().top + asteroid.outerHeight();
-    bulletHeightBoundary = bullet.offset().top + bullet.outerHeight();
+    // y-axis collision
+    asteroidHeightBeginning = asteroid.offset().top;
+    asteroidHeightEnd = asteroid.offset().top + asteroid.outerHeight();
+    bulletHeightBoundary = bullet.eq(-1).offset().top + bullet.eq(-1).outerHeight();
 
-    asteroidWidthBoundary = asteroid.offset().left + asteroid.outerWidth();
-    bulletWidthBoundary = bullet.offset().left + bullet.outerWidth();
-// collision()
+    // x-axis collision
 
-  if (asteroidHeightBoundary >= bulletHeightBoundary) {
-    debugger
-  }
+    // asteroidWidthBoundary = asteroid.offset().left + asteroid.outerWidth(true);
 
-    asteroidHeightBoundary >= bulletHeightBoundary ? console.log('COLLISSIOINONONO') : console.log('no collision');
+    asteroidWidthBeginning = asteroid.offset().left;
+    asteroidWidthEnd = asteroidWidthBeginning + asteroid.outerWidth();
+
+    bulletWidthBoundary = bullet.eq(-1).offset().left + bullet.eq(-1).outerWidth();
+
+    if (asteroidWidthBeginning < bulletWidthBoundary && bulletWidthBoundary < asteroidWidthEnd && asteroidHeightEnd >= bulletHeightBoundary && bulletHeightBoundary > asteroidHeightBeginning) {
+      debugger
+    }
+
+
+    //
+    // if (asteroidWidthBoundary >= bulletWidthBoundary && asteroidHeightBoundary >= bulletHeightBoundary) {
+    //   debugger
+    // }
+
+    // collision()
+
+  //
+  // if (asteroidHeightBoundary >= bulletHeightBoundary) {
+  //   debugger
+  // }
+
+    // asteroidHeightBoundary >= bulletHeightBoundary ? console.log('COLLISSIOINONONO') : console.log('no collision');
 
   }
 
@@ -82,14 +102,6 @@ $(function() {
 
   */
 
-
-  function changeInterval() {
-    // fails after 2 changes even though interval Running does change accurately. Set Interval should be inside a function?
-
-    console.log('before execution intervalRunning is: ' + intervalRunning);
-    intervalRunning ? clearInterval(interval) : setInterval(moveAsteroid, 50);
-    intervalRunning = !intervalRunning;
-  }
 
   function shoot() {
     $bullet = $('.bullet');
@@ -191,6 +203,16 @@ $(function() {
       console.log($spaceShip.offset().top);
     }
   }
+
+
+    function changeInterval() {
+      // fails after 2 changes even though interval Running does change accurately. Set Interval should be inside a function?
+
+      console.log('before execution intervalRunning is: ' + intervalRunning);
+      intervalRunning ? clearInterval(interval) : setInterval(moveAsteroid, 50);
+      intervalRunning = !intervalRunning;
+    }
+
 });
 
 
