@@ -2,11 +2,13 @@ $(function() {
   console.log('dom loaded');
 
   if ($('body').is('.gamePage')) {
-
     var $spaceShip = $('#spaceShip');
+
+// set all global variables to local
     $gun = $('#gun');
     $gun.offset({top: 600});
     $bullet = $('.bullet');
+    $bulletInitialPosition = $('.bullet').offset().top;
 
     // Asteroid coordination
     var $asteroid = $('.asteroid');
@@ -18,47 +20,25 @@ $(function() {
     var interval = setInterval(moveAsteroid, 50);
     var intervalRunning = true;
 
-// debugger
+    // y-axis collision
+// set all global variables to local
+    asteroidHeightBeginning = $asteroid.offset().top;
+    asteroidHeightEnd = $asteroid.offset().top + $asteroid.outerHeight();
+    bulletHeightBoundary = $bullet.eq(0).offset().top + $bullet.eq(0).outerHeight();
+    bulletHeightBeginning = $bullet.eq(0).offset().top;
+
+    // x-axis collision
+    asteroidWidthBeginning = $asteroid.offset().left;
+    asteroidWidthEnd = asteroidWidthBeginning + $asteroid.outerWidth();
+    bulletWidthBoundary = $bullet.eq(-1).offset().left + $bullet.eq(-1).outerWidth();
   };
 
 // <<<<------------------- Functions ------------------->>>>
 
-  // offset().top + outerHeight
-
   function isCollision(asteroid, bullet) {
-    // y-axis collision
-    asteroidHeightBeginning = asteroid.offset().top;
-    asteroidHeightEnd = asteroid.offset().top + asteroid.outerHeight();
-    bulletHeightBoundary = bullet.eq(-1).offset().top + bullet.eq(-1).outerHeight();
-
-    // x-axis collision
-
-    // asteroidWidthBoundary = asteroid.offset().left + asteroid.outerWidth(true);
-
-    asteroidWidthBeginning = asteroid.offset().left;
-    asteroidWidthEnd = asteroidWidthBeginning + asteroid.outerWidth();
-
-    bulletWidthBoundary = bullet.eq(-1).offset().left + bullet.eq(-1).outerWidth();
-
     if (asteroidWidthBeginning < bulletWidthBoundary && bulletWidthBoundary < asteroidWidthEnd && asteroidHeightEnd >= bulletHeightBoundary && bulletHeightBoundary > asteroidHeightBeginning) {
-      debugger
+      return true;
     }
-
-
-    //
-    // if (asteroidWidthBoundary >= bulletWidthBoundary && asteroidHeightBoundary >= bulletHeightBoundary) {
-    //   debugger
-    // }
-
-    // collision()
-
-  //
-  // if (asteroidHeightBoundary >= bulletHeightBoundary) {
-  //   debugger
-  // }
-
-    // asteroidHeightBoundary >= bulletHeightBoundary ? console.log('COLLISSIOINONONO') : console.log('no collision');
-
   }
 
   function isCorner() {
@@ -70,16 +50,13 @@ $(function() {
       }
   }
 
-
-
-
   function changeDirections() {
     // update boolean value to signal change in direction in moveAsteroid()
     isMovingRight = !isMovingRight;
   }
 
   function moveAsteroid() {
-    isCollision($asteroid, $bullet);
+    isCollision($asteroid, $bullet.eq(0));
     if (isCorner()) changeDirections();
 
     if (isMovingRight) {
@@ -91,55 +68,45 @@ $(function() {
     }
   }
 
-
 // asteroid and bullet disapper upon getting hit by bullet
-  /* asteroid offset to find position always
-    - find offset at top specifically
-  - before each asteroid move - detect if it's been hit by bullet
-  - if hit, remove both asteroid and bullet
-  -
+  // if hit, remove both asteroid and bullet
 
 
-  */
+  function initialShot() {
+    console.log('shooting resting bullet');
 
-
-  function shoot() {
     $bullet = $('.bullet');
-    setInterval(shootBullet, 100);
+    $('.resting').toggleClass('resting fired');
+    setInterval(shootBullet, 500);
 
-    function shootBullet() {
-      $bullet.animate({top: '-=25px'}, 50, 'linear');
-    }
-    console.log('shooting!');
-
-
-    console.log('loading next bullet');
     nextBullet();
+    setInterval(destroyBullet, 100);
+  }
 
-    console.log('starting destroy bullet interval');
-    setInterval(destroyBullet, 10);
 
-// debugger
-    console.log('bullet count:' + $bullet.length);
+  function shootBullet() {
+    console.log('Shoot bullet animation');
+
+    var $firedBullet = $('.fired');
+    $firedBullet.animate({top: '-=25px'}, 50, 'linear');
   }
 
   function nextBullet() {
-    $bullet = $bullet.add($('<div>').addClass('bullet'));
-// debugger
+    console.log('next bullet begin loaded');
+    $bullet = $('.bullet').add($('<div class=\'bullet resting\'>'));
     $('#gun').append($bullet);
   }
 
   function destroyBullet() {
-    if ($bullet.eq(0).offset().top < 200) {
-      var first = $bullet.eq(0);
-      $bullet.remove(first);
+    var $firedBullet = $('.fired');
 
-// how to remove an element from arry in jquery?
-
-// debugger
+    if ($firedBullet.length == 0) {
+      return;
+    } else if ($firedBullet.offset().top < 200 || isCollision($asteroid, $bullet)) {
+        $firedBullet.remove();
+        console.log('destroyed bullet!!');
     }
   }
-
 
 
 
@@ -166,7 +133,7 @@ $(function() {
       case 40:
         return downMove();
       case 32:
-        return shoot();
+        return initialShot();
 
       // logic to start / stop interval upon hitting 'k'
       case 75:
@@ -179,7 +146,6 @@ $(function() {
       $spaceShip.animate({left: '-=25px'}, 50, 'linear');
       console.log('moved left');
     }
-// debuggers
   }
 
   function rightMove() {
@@ -212,7 +178,6 @@ $(function() {
       intervalRunning ? clearInterval(interval) : setInterval(moveAsteroid, 50);
       intervalRunning = !intervalRunning;
     }
-
 });
 
 
