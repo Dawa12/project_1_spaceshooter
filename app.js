@@ -56,7 +56,8 @@ $(function() {
   }
 
   function moveAsteroid() {
-    isCollision($asteroid, $bullet.eq(0));
+    var $firedBullet = $('.fired');
+    isCollision($asteroid, $firedBullet.first());
     if (isCorner()) changeDirections();
 
     if (isMovingRight) {
@@ -86,7 +87,6 @@ $(function() {
 
   function shootBullet() {
     console.log('Shoot bullet animation');
-
     var $firedBullet = $('.fired');
     $firedBullet.animate({top: '-=25px'}, 50, 'linear');
   }
@@ -102,8 +102,9 @@ $(function() {
 
     if ($firedBullet.length == 0) {
       return;
-    } else if ($firedBullet.offset().top < 200 || isCollision($asteroid, $bullet)) {
-        $firedBullet.remove();
+    } else if ($firedBullet.first().offset().top < 200 || isCollision($asteroid, $firedBullet.first())) {
+// debugger
+        $firedBullet.first().remove();
         console.log('destroyed bullet!!');
     }
   }
