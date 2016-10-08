@@ -8,7 +8,6 @@ $(function() {
     $gun = $('#gun');
     $gun.offset({top: 600});
     $bullet = $('.bullet');
-    $bulletInitialPosition = $('.bullet').offset().top;
 
     // Asteroid coordination
     var $asteroid = $('.asteroid');
@@ -76,25 +75,39 @@ $(function() {
   function initialShot() {
     console.log('shooting resting bullet');
 
-    $bullet = $('.bullet');
+    if ($('.resting').length == 0) nextBullet();
+
+    var $bulletInitialTop = $('.bullet').offset().top;
+    var $bulletInitialLeft = $('.bullet').offset().left;
+
     $('.resting').toggleClass('resting fired');
+    // detach bullet from gun and to body so bullet won't move with spaceship when it goes sideways
+    $('body').append($('.fired').first());
+
+    $('.fired').last().css({'top': $bulletInitialTop, 'left': $bulletInitialLeft});
+
+// debugger
     setInterval(shootBullet, 500);
 
-    nextBullet();
+// uncomment later
+    // nextBullet();
     setInterval(destroyBullet, 100);
   }
-
 
   function shootBullet() {
     console.log('Shoot bullet animation');
     var $firedBullet = $('.fired');
+// debugger
     $firedBullet.animate({top: '-=25px'}, 50, 'linear');
+    // $firedBullet.animate({top: '-=25px', left: '$bulletInitialLeft'}, 50, 'linear');
+// debugger
+
   }
 
   function nextBullet() {
-    console.log('next bullet begin loaded');
-    $bullet = $('.bullet').add($('<div class=\'bullet resting\'>'));
-    $('#gun').append($bullet);
+    console.log('next bullet begin created in DOM');
+    $('#gun').append($('<div class=\'bullet resting\'>'));
+// debugger
   }
 
   function destroyBullet() {

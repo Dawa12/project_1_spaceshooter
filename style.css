@@ -66,18 +66,7 @@ body {
 
   position: absolute;
   margin: 0 auto;
-  z-index: -1;
-}
-
-.testbullet {
-  height: 20px;
-  width: 10px;
-  background-color: red;
-
-  position: absolute;
-
-  /*margin: 0 auto;*/
-  /*z-index: -1;*/
+  z-index: 1;
 }
 
 
