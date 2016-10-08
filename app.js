@@ -19,24 +19,40 @@ $(function() {
     var interval = setInterval(moveAsteroid, 50);
     var intervalRunning = true;
 
-    // y-axis collision
-// set all global variables to local
-    asteroidHeightBeginning = $asteroid.offset().top;
-    asteroidHeightEnd = $asteroid.offset().top + $asteroid.outerHeight();
-    bulletHeightBoundary = $bullet.eq(0).offset().top + $bullet.eq(0).outerHeight();
-    bulletHeightBeginning = $bullet.eq(0).offset().top;
-
-    // x-axis collision
-    asteroidWidthBeginning = $asteroid.offset().left;
-    asteroidWidthEnd = asteroidWidthBeginning + $asteroid.outerWidth();
-    bulletWidthBoundary = $bullet.eq(-1).offset().left + $bullet.eq(-1).outerWidth();
+    setInterval(shootBullet, 50);
+    setInterval(destroyBullet, 1);
+    setInterval(isCollision, 10);
   };
 
 // <<<<------------------- Functions ------------------->>>>
 
-  function isCollision(asteroid, bullet) {
-    if (asteroidWidthBeginning < bulletWidthBoundary && bulletWidthBoundary < asteroidWidthEnd && asteroidHeightEnd >= bulletHeightBoundary && bulletHeightBoundary > asteroidHeightBeginning) {
-      return true;
+  function isCollision() {
+// debugger
+
+// perhaps need to keep reassinging and upadting $asteroid / $bullet after adding new bulletss
+
+    var $fired = $('.fired');
+
+
+    // y-axis collision
+    // set all global variables to local
+    asteroidHeightBeginning = $asteroid.offset().top;
+    asteroidHeightEnd = $asteroid.offset().top + $asteroid.outerHeight(true);
+    asteroidWidthBeginning = $asteroid.offset().left;
+    asteroidWidthEnd = asteroidWidthBeginning + $asteroid.outerWidth(true);
+
+    // nested if to prevent error of calling .first on empty $fired array, if all fired bullets were distroyed
+
+    if ($fired.length != 0) {
+      bulletHeightBoundary = $fired.first().offset().top + $fired.first().outerHeight();
+      bulletHeightBeginning = $fired.first().offset().top;
+      bulletWidthBoundary = $fired.first().offset().left + $fired.first().outerWidth();
+
+      if (asteroidWidthBeginning < bulletWidthBoundary && bulletWidthBoundary < asteroidWidthEnd && asteroidHeightEnd >= bulletHeightBoundary && bulletHeightBoundary > asteroidHeightBeginning) {
+        console.log('collision OCCURRED');
+        debugger
+        return true;
+      }
     }
   }
 
@@ -56,7 +72,6 @@ $(function() {
 
   function moveAsteroid() {
     var $firedBullet = $('.fired');
-    isCollision($asteroid, $firedBullet.first());
     if (isCorner()) changeDirections();
 
     if (isMovingRight) {
@@ -75,33 +90,23 @@ $(function() {
   function initialShot() {
     console.log('shooting resting bullet');
 
-    if ($('.resting').length == 0) nextBullet();
-
     var $bulletInitialTop = $('.bullet').offset().top;
     var $bulletInitialLeft = $('.bullet').offset().left;
 
     $('.resting').toggleClass('resting fired');
-    // detach bullet from gun and to body so bullet won't move with spaceship when it goes sideways
+    // detach bullet from gun and move to the body so bullet won't move with spaceship when it goes sideways
     $('body').append($('.fired').first());
 
     $('.fired').last().css({'top': $bulletInitialTop, 'left': $bulletInitialLeft});
 
-// debugger
-    setInterval(shootBullet, 500);
-
-// uncomment later
-    // nextBullet();
-    setInterval(destroyBullet, 100);
+    if ($('.resting').length == 0) nextBullet();
   }
 
   function shootBullet() {
     console.log('Shoot bullet animation');
     var $firedBullet = $('.fired');
-// debugger
-    $firedBullet.animate({top: '-=25px'}, 50, 'linear');
-    // $firedBullet.animate({top: '-=25px', left: '$bulletInitialLeft'}, 50, 'linear');
-// debugger
 
+    $firedBullet.animate({top: '-=25px'}, 50, 'linear');
   }
 
   function nextBullet() {
@@ -113,9 +118,11 @@ $(function() {
   function destroyBullet() {
     var $firedBullet = $('.fired');
 
+    // if ($firedBullet.length >= 2) debugger
+
     if ($firedBullet.length == 0) {
       return;
-    } else if ($firedBullet.first().offset().top < 200 || isCollision($asteroid, $firedBullet.first())) {
+    } else if ($firedBullet.first().offset().top < 150 || isCollision()) {
 // debugger
         $firedBullet.first().remove();
         console.log('destroyed bullet!!');
