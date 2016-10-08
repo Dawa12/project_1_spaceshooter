@@ -5,9 +5,9 @@ $(function() {
     var $spaceShip = $('#spaceShip');
 
 // set all global variables to local
-    $gun = $('#gun');
+    var $gun = $('#gun');
     $gun.offset({top: 600});
-    $bullet = $('.bullet');
+    var $bullet = $('.bullet');
 
     // Asteroid coordination
     var $asteroid = $('.asteroid');
@@ -27,30 +27,23 @@ $(function() {
 // <<<<------------------- Functions ------------------->>>>
 
   function isCollision() {
-// debugger
-
-// perhaps need to keep reassinging and upadting $asteroid / $bullet after adding new bulletss
-
     var $fired = $('.fired');
 
+    // asteroid height + width properties
+    var asteroidHeightBeginning = $asteroid.offset().top;
+    var asteroidHeightEnd = $asteroid.offset().top + $asteroid.outerHeight(true);
+    var asteroidWidthBeginning = $asteroid.offset().left;
+    var asteroidWidthEnd = asteroidWidthBeginning + $asteroid.outerWidth(true);
 
-    // y-axis collision
-    // set all global variables to local
-    asteroidHeightBeginning = $asteroid.offset().top;
-    asteroidHeightEnd = $asteroid.offset().top + $asteroid.outerHeight(true);
-    asteroidWidthBeginning = $asteroid.offset().left;
-    asteroidWidthEnd = asteroidWidthBeginning + $asteroid.outerWidth(true);
-
-    // nested if to prevent error of calling .first on empty $fired array, if all fired bullets were distroyed
-
+    // nested if condition to prevent error of calling .first on empty $fired array, if all fired bullets were distroyed
     if ($fired.length != 0) {
-      bulletHeightBoundary = $fired.first().offset().top + $fired.first().outerHeight();
-      bulletHeightBeginning = $fired.first().offset().top;
-      bulletWidthBoundary = $fired.first().offset().left + $fired.first().outerWidth();
+      var bulletHeightBoundary = $fired.first().offset().top + $fired.first().outerHeight();
+      var bulletHeightBeginning = $fired.first().offset().top;
+      var bulletWidthBoundary = $fired.first().offset().left + $fired.first().outerWidth();
 
+      // asteroid + bullet collision logic
       if (asteroidWidthBeginning < bulletWidthBoundary && bulletWidthBoundary < asteroidWidthEnd && asteroidHeightEnd >= bulletHeightBoundary && bulletHeightBoundary > asteroidHeightBeginning) {
         console.log('collision OCCURRED');
-        debugger
         return true;
       }
     }
@@ -89,11 +82,11 @@ $(function() {
 
   function initialShot() {
     console.log('shooting resting bullet');
-
     var $bulletInitialTop = $('.bullet').offset().top;
     var $bulletInitialLeft = $('.bullet').offset().left;
 
     $('.resting').toggleClass('resting fired');
+
     // detach bullet from gun and move to the body so bullet won't move with spaceship when it goes sideways
     $('body').append($('.fired').first());
 
@@ -112,18 +105,13 @@ $(function() {
   function nextBullet() {
     console.log('next bullet begin created in DOM');
     $('#gun').append($('<div class=\'bullet resting\'>'));
-// debugger
   }
 
   function destroyBullet() {
     var $firedBullet = $('.fired');
-
-    // if ($firedBullet.length >= 2) debugger
-
     if ($firedBullet.length == 0) {
       return;
     } else if ($firedBullet.first().offset().top < 150 || isCollision()) {
-// debugger
         $firedBullet.first().remove();
         console.log('destroyed bullet!!');
     }
