@@ -16,13 +16,24 @@ body {
   text-align: center;
 }
 
+.parent_asteroid {
+  /*position: relative;*/
+  /*width: 100%;*/
+  display: flex;
+  justify-content: space-between;
+}
+
 .asteroid {
   height: 40px;
   width: 40px;
   background: yellow;
+  /*margin: 0 40px;*/
   margin: 5px;
   border-radius: 50px;
-  position: absolute;
+
+  /*position: absolute;*/
+  position: relative;
+
 }
 
 #spaceShip {

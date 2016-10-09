@@ -1,6 +1,12 @@
 // sampe js code
+    class Asteroid {
+      constructor() {
+        this.isMovingRight = true;
+        this.position = $this.eq(i).offset().left;
+      }
 
-switch (this.which) {
-  case 37:
-  console.log('chose 37');
-}
+      removeAsteroid() {
+        this.remove();
+        console.log('asteroid destroyed');
+      }
+    }
