@@ -24,13 +24,71 @@ $(function() {
 
 // <<<<------------------- Functions ------------------->>>>
 
-  function calculateAsteroidPosition() {
-    var $asteroidPosition = [];
+  function createAsteroidObjects() {
+    $arrayOfAsteroids = [];
+
     for (var i = 0; i < $asteroid.length; i++) {
-      $asteroidPosition.push($asteroid.eq(i).offset().left);
+      $arrayOfAsteroids.push({'element': $asteroid[i]})
+      // $arrayOfAsteroids[1].position = 333;
+      // $arrayOfAsteroids[i].isMovingRight = true;
     }
-    return $asteroidPosition;
+
+    return $arrayOfAsteroids;
   }
+
+  function calculateAsteroidPosition() {
+    var $asteroidsArray = createAsteroidObjects();
+    var $asteroid = $('.asteroid');
+
+    for (var i = 0; i < $asteroidsArray.length; i++) {
+      $asteroidsArray[i].leftPosition = $asteroid.eq(i).offset().left;
+    }
+    return $asteroidsArray;
+  }
+
+    function isCorner() {
+      // using parseFloat to remove 'px' from $asteroidPosition for comparison with borders
+      var $asteroidPosition = calculateAsteroidPosition();
+
+  // view asteroid positions
+      // console.log($asteroidPosition);
+
+      for (var i = 0; i < $asteroidPosition.length; i++) {
+        if (parseFloat($asteroidPosition[i]) > $rightBorder || parseFloat($asteroidPosition[i]) <= $leftBorder) {
+          // return debugger if true - see which asteorid hits corner
+          // debugger
+          return true;
+        }
+      }
+
+     return false;
+    }
+
+    function changeDirections() {
+      // update boolean value to signal change in direction of asteroid()
+      isMovingRight = !isMovingRight;
+    }
+
+    function moveAsteroid() {
+      var $firedBullet = $('.fired');
+
+      if (isCorner()) changeDirections();
+      $asteroid = $('.asteroid');
+      for (var i = 0; i < $asteroid.length; i++) {
+        if (isMovingRight) {
+          $asteroid.eq(i).css("left", "+=10px");
+          console.log('moving right');
+        } else {
+          $asteroid.eq(i).css("left", "-=10px");
+          console.log('moving left');
+        }
+      }
+    }
+
+
+
+
+
 
   function removeAsteroid() {
     $asteroid = $('.asteroid');
@@ -62,64 +120,10 @@ $(function() {
     }
   }
 
-  function isCorner() {
-    // using parseFloat to remove 'px' from $asteroidPosition for comparison with borders
 
-    var $asteroidPosition = calculateAsteroidPosition();
-
-// view asteroid positions
-    // debugger
-    console.log($asteroidPosition);
-
-    for (var i = 0; i < $asteroidPosition.length; i++) {
-// debugger
-      if (parseFloat($asteroidPosition[i]) > $rightBorder || parseFloat($asteroidPosition[i]) <= $leftBorder) {
-        // return debugger if true - see which asteorid hits corner
-        debugger
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-
-  function changeDirections() {
-    // update boolean value to signal change in direction of asteroid()
-    isMovingRight = !isMovingRight;
-  }
-
-  function moveAsteroid() {
-    var $firedBullet = $('.fired');
-    if (isCorner()) changeDirections();
-
-    $asteroid = $('.asteroid');
-
-// debugger
-// check if ismovingright is true
-
-
-// isMovingRight property for each asteroid
-  // $asteroid becomes array of objects with each asterid having isMovingRight property
-
-
-
-    for (var i = 0; i < $asteroid.length; i++) {
-      if (isMovingRight) {
-        $asteroid.eq(i).css("left", "+=10px");
-        console.log('moving right');
-      } else {
-        $asteroid.eq(i).css("left", "-=10px");
-        console.log('moving left');
-      }
-    }
-// debugger
-// asteroid should have moved by now
-  }
 
 // asteroid and bullet disapper upon getting hit by bullet
   // if hit, remove both asteroid and bullet
-
-
   function initialShot() {
     console.log('shooting resting bullet');
     var $bulletInitialTop = $('.bullet').offset().top;
