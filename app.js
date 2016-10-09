@@ -20,6 +20,9 @@ $(function() {
     // setInterval(shootBullet, 50);
     // setInterval(destroyBullet, 1);
     // setInterval(isCollision, 10);
+
+    var $asteroidsArray = createAsteroidObjects();
+
   };
 
 // <<<<------------------- Functions ------------------->>>>
@@ -28,67 +31,59 @@ $(function() {
     $arrayOfAsteroids = [];
 
     for (var i = 0; i < $asteroid.length; i++) {
-      $arrayOfAsteroids.push({'element': $asteroid[i]})
-      // $arrayOfAsteroids[1].position = 333;
-      // $arrayOfAsteroids[i].isMovingRight = true;
+      $arrayOfAsteroids.push({'element': $asteroid[i], 'isMovingRight': true});
     }
 
     return $arrayOfAsteroids;
   }
 
   function calculateAsteroidPosition() {
-    var $asteroidsArray = createAsteroidObjects();
-    var $asteroid = $('.asteroid');
+    // var $asteroidsArray = createAsteroidObjects();
+    // var $asteroid = $('.asteroid');
+
+    // cannot create a new $asteroid but need to get existing positions therefore must not operate offset on $asteroid but directly on $('.asteroid')
 
     for (var i = 0; i < $asteroidsArray.length; i++) {
-      $asteroidsArray[i].leftPosition = $asteroid.eq(i).offset().left;
+      $asteroidsArray[i].leftPosition = $('.asteroid').eq(i).offset().left;
     }
     return $asteroidsArray;
   }
 
     function isCorner() {
       // using parseFloat to remove 'px' from $asteroidPosition for comparison with borders
-      var $asteroidPosition = calculateAsteroidPosition();
 
-  // view asteroid positions
-      // console.log($asteroidPosition);
+      calculateAsteroidPosition();
+      // $asteroidsArray = calculateAsteroidPosition();
 
-      for (var i = 0; i < $asteroidPosition.length; i++) {
-        if (parseFloat($asteroidPosition[i]) > $rightBorder || parseFloat($asteroidPosition[i]) <= $leftBorder) {
-          // return debugger if true - see which asteorid hits corner
-          // debugger
-          return true;
+      for (var i = 0; i < $asteroidsArray.length; i++) {
+        if (parseFloat($asteroidsArray[i].leftPosition) > $rightBorder || parseFloat($asteroidsArray[i].leftPosition) <= $leftBorder) {
+          $asteroidsArray[i].isMovingRight = !$asteroidsArray[i].isMovingRight;
+          // if (i == 4) debugger
         }
       }
 
-     return false;
-    }
-
-    function changeDirections() {
-      // update boolean value to signal change in direction of asteroid()
-      isMovingRight = !isMovingRight;
+      return $asteroidsArray;
     }
 
     function moveAsteroid() {
       var $firedBullet = $('.fired');
+      // var $asteroidsArray = isCorner();
+      isCorner();
 
-      if (isCorner()) changeDirections();
-      $asteroid = $('.asteroid');
-      for (var i = 0; i < $asteroid.length; i++) {
-        if (isMovingRight) {
-          $asteroid.eq(i).css("left", "+=10px");
+      for (var i = 0; i < $asteroidsArray.length; i++) {
+        if ($asteroidsArray[i].isMovingRight) {
+          $('.asteroid').eq(i).css("left", "+=10px");
+          $asteroidsArray[i].leftPosition += 10;
           console.log('moving right');
+// debugger
         } else {
-          $asteroid.eq(i).css("left", "-=10px");
+          $('.asteroid').eq(i).css("left", "-=10px");          $asteroidsArray[i].leftPosition -= 10;
           console.log('moving left');
+
+    // debugger
         }
       }
     }
-
-
-
-
-
 
   function removeAsteroid() {
     $asteroid = $('.asteroid');

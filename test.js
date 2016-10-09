@@ -10,3 +10,9 @@
         console.log('asteroid destroyed');
       }
     }
+
+
+        // function changeDirections() {
+        //   // update boolean value to signal change in direction of asteroid()
+        //   isMovingRight = !isMovingRight;
+        // }
