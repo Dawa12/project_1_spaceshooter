@@ -17,12 +17,10 @@ $(function() {
     var $leftBorder = 0;
     var $rightBorder = window.innerWidth - 50;
 
-
-    // var interval = setInterval(moveAsteroid, 50);
-    // var intervalRunning = true;
-    // setInterval(shootBullet, 50);
-    // setInterval(destroyBullet, 10);
-    // setInterval(isCollision, 10);
+    var interval = setInterval(moveAsteroid, 50);
+    setInterval(shootBullet, 50);
+    setInterval(destroyBullet, 10);
+    setInterval(isCollision, 10);
 
     var $asteroidsArray = createAsteroidObjects();
   };
@@ -98,7 +96,7 @@ $(function() {
     }
 
     function moveAsteroid() {
-      console.log('moving asteroid');
+      // console.log('moving asteroid');
 
       var $firedBullet = $('.fired');
 
@@ -108,8 +106,8 @@ $(function() {
       for (var i = 0; i < $asteroidsArray.length; i++) {
         // if ($asteroidsArray.length == 4) debugger;
         // if ($('.asteroid').eq(i).offset().left)
-        console.log(i + " " + $('.asteroid').eq(i).offset().left);
-        console.log(i + " " + $asteroidsArray[i].isMovingRight);
+        // console.log(i + " " + $('.asteroid').eq(i).offset().left);
+        // console.log(i + " " + $asteroidsArray[i].isMovingRight);
 
         if ($asteroidsArray[i].isMovingRight) {
           $('.asteroid').eq(i).css("left", "+=10px");
@@ -132,7 +130,6 @@ $(function() {
   function isCollision() {
     // asteroid height + width properties
 
-
     for (var i = 0; i < $('.asteroid').length; i++) {
       var asteroidHeightBeginning = $('.asteroid').eq(i).offset().top;
       var asteroidHeightEnd = $('.asteroid').eq(i).offset().top + $('.asteroid').eq(i).outerHeight(true);
@@ -152,7 +149,7 @@ $(function() {
           // var hitAsteroid = findHitAsteroid();
 
 // debugger
-          console.log($('.asteroid').eq(i).text() + ' is removed');
+          // console.log($('.asteroid').eq(i).text() + ' is removed');
 
           $('.asteroid').eq(i).remove();
 // hit div of index 3 but index 4 is removed
@@ -169,7 +166,7 @@ $(function() {
 // asteroid and bullet disapper upon getting hit by bullet
   // if hit, remove both asteroid and bullet
   function initialShot() {
-    console.log('shooting resting bullet');
+    // console.log('shooting resting bullet');
     var $bulletInitialTop = $('.bullet').offset().top;
     var $bulletInitialLeft = $('.bullet').offset().left;
 
@@ -181,6 +178,9 @@ $(function() {
     $('.fired').last().css({'top': $bulletInitialTop, 'left': $bulletInitialLeft});
 
     if ($('.resting').length == 0) nextBullet();
+
+    // prevent space from initalizing page scroll
+    return false
   }
 
   function shootBullet() {
@@ -199,7 +199,7 @@ $(function() {
     var $firedBullet = $('.fired');
     if ($firedBullet.length == 0) {
       return;
-    } else if ($firedBullet.first().offset().top < 150 || isCollision()) {
+    } else if ($firedBullet.first().offset().top < 100 || isCollision()) {
         $firedBullet.first().remove();
         console.log('destroyed bullet!!');
     }
@@ -243,13 +243,17 @@ $(function() {
       $spaceShip.animate({left: '-=25px'}, 50, 'linear');
       console.log('moved left');
     }
+
+    return false
   }
 
   function rightMove() {
-    if ($spaceShip.offset().left <= 645) {
+    if ($spaceShip.offset().left < window.innerWidth-150) {
       $spaceShip.animate({left: '+=25px'}, 50, 'linear');
       console.log('moved right');
     }
+
+    return false
   }
 
   function upMove() {
@@ -257,14 +261,18 @@ $(function() {
       $spaceShip.animate({top: '-=25px'}, 50, 'linear');
       console.log('moved up');
     }
+
+    return false
   }
 
   function downMove() {
-    if ($spaceShip.offset().top <= 560) {
+    if ($spaceShip.offset().top < 650) {
       $spaceShip.animate({top: '+=25px'}, 50, 'linear');
       console.log('moved down');
       console.log($spaceShip.offset().top);
     }
+
+    return false
   }
 
 
