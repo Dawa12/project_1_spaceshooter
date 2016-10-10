@@ -29,7 +29,7 @@ $(function() {
   function createAsteroidObjects() {
     $arrayOfAsteroids = [];
 
-    for (var i = 0; i < $asteroid.length; i++) {
+    for (var i = 0; i < $('.asteroid').length; i++) {
       $arrayOfAsteroids.push({'element': $asteroid[i], 'isMovingRight': true});
     }
 
@@ -45,8 +45,8 @@ $(function() {
     for (var i = 0; i < $('.asteroid').length; i++) {
   // if ($asteroidsArray[i].leftPosition == undefined) debugger
 
-  console.log('i = ' + i)
-  console.log($('.asteroid').eq(i))
+  // console.log('i = ' + i)
+  // console.log($('.asteroid').eq(i))
 
       $asteroidsArray[i].leftPosition = $('.asteroid').eq(i).offset().left;
 // debugger
@@ -81,7 +81,8 @@ $(function() {
           $asteroidsArray[i].leftPosition += 10;
           // console.log('moving right');
         } else {
-          $('.asteroid').eq(i).css("left", "-=10px");          $asteroidsArray[i].leftPosition -= 10;
+          $('.asteroid').eq(i).css("left", "-=10px");
+          $asteroidsArray[i].leftPosition -= 10;
           // console.log('moving left');
         }
       }
@@ -90,7 +91,7 @@ $(function() {
   function removeAsteroid() {
     $asteroid = $('.asteroid');
 
-    $asteroid.remove();
+    $('.asteroid').remove();
     console.log('collision destroyed asteroid');
   }
 
@@ -98,11 +99,11 @@ $(function() {
     var $fired = $('.fired');
 
     // asteroid height + width properties
-    for (var i = 0; i < $asteroid.length; i++) {
-      var asteroidHeightBeginning = $asteroid.eq(i).offset().top;
-      var asteroidHeightEnd = $asteroid.eq(i).offset().top + $asteroid.eq(i).outerHeight(true);
-      var asteroidWidthBeginning = $asteroid.eq(i).offset().left;
-      var asteroidWidthEnd = asteroidWidthBeginning + $asteroid.eq(i).outerWidth(true);
+    for (var i = 0; i < $('.asteroid').length; i++) {
+      var asteroidHeightBeginning = $('.asteroid').eq(i).offset().top;
+      var asteroidHeightEnd = $('.asteroid').eq(i).offset().top + $('.asteroid').eq(i).outerHeight(true);
+      var asteroidWidthBeginning = $('.asteroid').eq(i).offset().left;
+      var asteroidWidthEnd = asteroidWidthBeginning + $('.asteroid').eq(i).outerWidth(true);
 // debugger
       // nested if condition to prevent error of calling .first on empty $fired array, if all fired bullets were distroyed
       if ($fired.length != 0) {
@@ -114,7 +115,7 @@ $(function() {
         if (asteroidWidthBeginning < bulletWidthBoundary && bulletWidthBoundary < asteroidWidthEnd && asteroidHeightEnd >= bulletHeightBoundary && bulletHeightBoundary > asteroidHeightBeginning) {
           console.log('collision OCCURRED');
           // var hitAsteroid = findHitAsteroid();
-          $asteroid.eq(i).remove();
+          $('.asteroid').eq(i).remove();
           $asteroidsArray = createAsteroidObjects();
 // debugger
           return true;
