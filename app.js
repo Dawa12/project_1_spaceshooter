@@ -2,12 +2,12 @@ $(function() {
   console.log('dom loaded');
 
   if ($('body').is('.gamePage')) {
-    var $spaceShip = $('#spaceShip');
     insertPlayerName();
+    var $spaceShip = $('#spaceShip');
 
-// set all global variables to local
+    // preparing gun / bullet elements for spaceship
     var $gun = $('#gun');
-    $gun.offset({top: 600});
+    $gun.offset({top: 650});
     var $bullet = $('.bullet');
 
     // Asteroid coordination
@@ -17,7 +17,7 @@ $(function() {
     var $leftBorder = 0;
     var $rightBorder = window.innerWidth - 50;
 
-    var interval = setInterval(moveAsteroid, 50);
+    setInterval(moveAsteroid, 50);
     setInterval(shootBullet, 50);
     setInterval(destroyBullet, 10);
     setInterval(isCollision, 10);
@@ -38,7 +38,6 @@ $(function() {
     $('#insertName').text(getPlayerName())
   }
 
-
   function spaceTheAsteroids() {
     var increment = 0;
     for (var i = 0; i < $('.asteroid').length; i++) {
@@ -46,7 +45,6 @@ $(function() {
       increment += 150;
     }
   }
-
 
   function createAsteroidObjects() {
     $arrayOfAsteroids = [];
@@ -57,79 +55,44 @@ $(function() {
   }
 
   function calculateAsteroidPosition() {
-    // var $asteroidsArray = createAsteroidObjects();
-    // var $asteroid = $('.asteroid');
-
     // cannot create a new $asteroid but need to get existing positions therefore must not operate offset on $asteroid but directly on $('.asteroid')
-
     for (var i = 0; i < $('.asteroid').length; i++) {
-
-      // if ($('.asteroid').length == 4) debugger
-
       $asteroidsArray[i].leftPosition = $('.asteroid').eq(i).offset().left;
-
-// want to see if asteroidArray left position changes after element removal
-
-
-
-      // check to see that .asteroid and asteroidsArray positions are same
-      // if ($('.asteroid').length == 4) debugger;
     }
     return $asteroidsArray;
   }
 
-    function isCorner() {
-      // using parseFloat to remove 'px' from $asteroidPosition for comparison with borders
-
-      calculateAsteroidPosition();
-      // $asteroidsArray = calculateAsteroidPosition();
-
-      for (var i = 0; i < $asteroidsArray.length; i++) {
-        if (parseFloat($asteroidsArray[i].leftPosition) > $rightBorder || parseFloat($asteroidsArray[i].leftPosition) <= $leftBorder) {
-            $asteroidsArray[i].isMovingRight = !$asteroidsArray[i].isMovingRight;
-
-          // if ($asteroidsArray.length == 4) debugger
-        }
+  function isCorner() {
+    // using parseFloat to remove 'px' from $asteroidPosition for comparison with borders
+    calculateAsteroidPosition();
+    for (var i = 0; i < $asteroidsArray.length; i++) {
+      if (parseFloat($asteroidsArray[i].leftPosition) > $rightBorder || parseFloat($asteroidsArray[i].leftPosition) <= $leftBorder) {
+          $asteroidsArray[i].isMovingRight = !$asteroidsArray[i].isMovingRight;
       }
-
-      return $asteroidsArray;
     }
 
-    function moveAsteroid() {
-      // console.log('moving asteroid');
+    return $asteroidsArray;
+  }
 
-      var $firedBullet = $('.fired');
+  function moveAsteroid() {
+    var $firedBullet = $('.fired');
 
-      // calculate new isCorner() to udpate asteroidsArray position value
-      isCorner();
+    // calculate new isCorner() to update asteroidsArray position value
+    isCorner();
 
-      for (var i = 0; i < $asteroidsArray.length; i++) {
-        // if ($asteroidsArray.length == 4) debugger;
-        // if ($('.asteroid').eq(i).offset().left)
-        // console.log(i + " " + $('.asteroid').eq(i).offset().left);
-        // console.log(i + " " + $asteroidsArray[i].isMovingRight);
-
-        if ($asteroidsArray[i].isMovingRight) {
-          $('.asteroid').eq(i).css("left", "+=10px");
-          $asteroidsArray[i].leftPosition += 10;
-
-          // console.log('moving right');
-          // if ($asteroidsArray.length == 4) console.log($('.asteroid').eq(i).text() + ' moving right');
-
-        } else {
-          $('.asteroid').eq(i).css("left", "-=10px");
-          $asteroidsArray[i].leftPosition -= 10;
-
-          // if ($asteroidsArray.length == 4) console.log($('.asteroid').eq(i).text() + ' moving left');
-
-        }
+    for (var i = 0; i < $asteroidsArray.length; i++) {
+      if ($asteroidsArray[i].isMovingRight) {
+        $('.asteroid').eq(i).css("left", "+=10px");
+        $asteroidsArray[i].leftPosition += 10;
+      } else {
+        $('.asteroid').eq(i).css("left", "-=10px");
+        $asteroidsArray[i].leftPosition -= 10;
       }
-      // if ($('.asteroid').length == 4) debugger
     }
+  }
 
   function isCollision() {
     // asteroid height + width properties
-
     for (var i = 0; i < $('.asteroid').length; i++) {
       var asteroidHeightBeginning = $('.asteroid').eq(i).offset().top;
       var asteroidHeightEnd = $('.asteroid').eq(i).offset().top + $('.asteroid').eq(i).outerHeight(true);
@@ -146,40 +109,27 @@ $(function() {
         // asteroid + bullet collision logic
         if (asteroidWidthBeginning < bulletWidthBoundary && bulletWidthBoundary < asteroidWidthEnd && asteroidHeightEnd >= bulletHeightBoundary && bulletHeightBoundary > asteroidHeightBeginning) {
           console.log('collision OCCURRED');
-          // var hitAsteroid = findHitAsteroid();
+          // debugger
 
-// debugger
-          // console.log($('.asteroid').eq(i).text() + ' is removed');
-
+          // incrementScore();
           $('.asteroid').eq(i).remove();
-// hit div of index 3 but index 4 is removed
-// debugger
-
           $asteroidsArray.splice(i, 1);
-// debugger
           return true;
         }
       }
     }
   }
 
-// asteroid and bullet disapper upon getting hit by bullet
-  // if hit, remove both asteroid and bullet
   function initialShot() {
-    // console.log('shooting resting bullet');
     var $bulletInitialTop = $('.bullet').offset().top;
     var $bulletInitialLeft = $('.bullet').offset().left;
 
     $('.resting').toggleClass('resting fired');
-
-    // detach bullet from gun and move to the body so bullet won't move with spaceship when it goes sideways
     $('body').append($('.fired').first());
-
     $('.fired').last().css({'top': $bulletInitialTop, 'left': $bulletInitialLeft});
-
     if ($('.resting').length == 0) nextBullet();
 
-    // prevent space from initalizing page scroll
+    // prevent space bar key from initalizing page scroll
     return false
   }
 
@@ -205,20 +155,7 @@ $(function() {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// move spaceship commands
+  // move spaceship commands
   $('body').on('keydown', function(e) {
     switch (e.which) {
       case 37:
@@ -231,10 +168,6 @@ $(function() {
         return downMove();
       case 32:
         return initialShot();
-
-      // logic to start / stop interval upon hitting 'k'
-      case 75:
-        return changeInterval();
     }
   });
 
@@ -274,20 +207,4 @@ $(function() {
 
     return false
   }
-
-
-    function changeInterval() {
-      // fails after 2 changes even though interval Running does change accurately. Set Interval should be inside a function?
-
-      console.log('before execution intervalRunning is: ' + intervalRunning);
-      intervalRunning ? clearInterval(interval) : setInterval(moveAsteroid, 50);
-      intervalRunning = !intervalRunning;
-    }
 });
-
-
-
-
-
-
-//
