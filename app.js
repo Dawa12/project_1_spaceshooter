@@ -3,6 +3,7 @@ $(function() {
 
   if ($('body').is('.gamePage')) {
     var $spaceShip = $('#spaceShip');
+    insertPlayerName();
 
 // set all global variables to local
     var $gun = $('#gun');
@@ -16,10 +17,11 @@ $(function() {
     var $leftBorder = 0;
     var $rightBorder = window.innerWidth - 50;
 
-    var interval = setInterval(moveAsteroid, 50);
+
+    // var interval = setInterval(moveAsteroid, 50);
     // var intervalRunning = true;
-    setInterval(shootBullet, 50);
-    setInterval(destroyBullet, 10);
+    // setInterval(shootBullet, 50);
+    // setInterval(destroyBullet, 10);
     // setInterval(isCollision, 10);
 
     var $asteroidsArray = createAsteroidObjects();
@@ -27,9 +29,20 @@ $(function() {
 
 // <<<<------------------- Functions ------------------->>>>
 
+  function getPlayerName() {
+    var first = window.location.search.split('=')[1].split('+')[0];
+    var last = window.location.search.split('=')[1].split('+')[1];
+    var full = last ? first + " " + last : first;
+    return full;
+  }
+
+  function insertPlayerName() {
+    $('#insertName').text(getPlayerName())
+  }
+
+
   function spaceTheAsteroids() {
     var increment = 0;
-
     for (var i = 0; i < $('.asteroid').length; i++) {
       $('.asteroid').eq(i).css('left', '+=' + increment  + 'px');
       increment += 150;
