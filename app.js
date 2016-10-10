@@ -17,12 +17,11 @@ $(function() {
 
     var interval = setInterval(moveAsteroid, 50);
     // var intervalRunning = true;
-    // setInterval(shootBullet, 50);
-    // setInterval(destroyBullet, 1);
-    // setInterval(isCollision, 10);
+    setInterval(shootBullet, 50);
+    setInterval(destroyBullet, 1);
+    setInterval(isCollision, 10);
 
     var $asteroidsArray = createAsteroidObjects();
-
   };
 
 // <<<<------------------- Functions ------------------->>>>
@@ -43,8 +42,14 @@ $(function() {
 
     // cannot create a new $asteroid but need to get existing positions therefore must not operate offset on $asteroid but directly on $('.asteroid')
 
-    for (var i = 0; i < $asteroidsArray.length; i++) {
+    for (var i = 0; i < $('.asteroid').length; i++) {
+  // if ($asteroidsArray[i].leftPosition == undefined) debugger
+
+  console.log('i = ' + i)
+  console.log($('.asteroid').eq(i))
+
       $asteroidsArray[i].leftPosition = $('.asteroid').eq(i).offset().left;
+// debugger
     }
     return $asteroidsArray;
   }
@@ -74,19 +79,17 @@ $(function() {
         if ($asteroidsArray[i].isMovingRight) {
           $('.asteroid').eq(i).css("left", "+=10px");
           $asteroidsArray[i].leftPosition += 10;
-          console.log('moving right');
-// debugger
+          // console.log('moving right');
         } else {
           $('.asteroid').eq(i).css("left", "-=10px");          $asteroidsArray[i].leftPosition -= 10;
-          console.log('moving left');
-
-    // debugger
+          // console.log('moving left');
         }
       }
     }
 
   function removeAsteroid() {
     $asteroid = $('.asteroid');
+
     $asteroid.remove();
     console.log('collision destroyed asteroid');
   }
@@ -95,24 +98,34 @@ $(function() {
     var $fired = $('.fired');
 
     // asteroid height + width properties
-    var asteroidHeightBeginning = $asteroid.offset().top;
-    var asteroidHeightEnd = $asteroid.offset().top + $asteroid.outerHeight(true);
-    var asteroidWidthBeginning = $asteroid.offset().left;
-    var asteroidWidthEnd = asteroidWidthBeginning + $asteroid.outerWidth(true);
+    for (var i = 0; i < $asteroid.length; i++) {
+      var asteroidHeightBeginning = $asteroid.eq(i).offset().top;
+      var asteroidHeightEnd = $asteroid.eq(i).offset().top + $asteroid.eq(i).outerHeight(true);
+      var asteroidWidthBeginning = $asteroid.eq(i).offset().left;
+      var asteroidWidthEnd = asteroidWidthBeginning + $asteroid.eq(i).outerWidth(true);
+// debugger
+      // nested if condition to prevent error of calling .first on empty $fired array, if all fired bullets were distroyed
+      if ($fired.length != 0) {
+        var bulletHeightBoundary = $fired.first().offset().top + $fired.first().outerHeight();
+        var bulletHeightBeginning = $fired.first().offset().top;
+        var bulletWidthBoundary = $fired.first().offset().left + $fired.first().outerWidth();
 
-    // nested if condition to prevent error of calling .first on empty $fired array, if all fired bullets were distroyed
-    if ($fired.length != 0) {
-      var bulletHeightBoundary = $fired.first().offset().top + $fired.first().outerHeight();
-      var bulletHeightBeginning = $fired.first().offset().top;
-      var bulletWidthBoundary = $fired.first().offset().left + $fired.first().outerWidth();
-
-      // asteroid + bullet collision logic
-      if (asteroidWidthBeginning < bulletWidthBoundary && bulletWidthBoundary < asteroidWidthEnd && asteroidHeightEnd >= bulletHeightBoundary && bulletHeightBoundary > asteroidHeightBeginning) {
-        console.log('collision OCCURRED');
-        removeAsteroid();
-        return true;
+        // asteroid + bullet collision logic
+        if (asteroidWidthBeginning < bulletWidthBoundary && bulletWidthBoundary < asteroidWidthEnd && asteroidHeightEnd >= bulletHeightBoundary && bulletHeightBoundary > asteroidHeightBeginning) {
+          console.log('collision OCCURRED');
+          // var hitAsteroid = findHitAsteroid();
+          $asteroid.eq(i).remove();
+          $asteroidsArray = createAsteroidObjects();
+// debugger
+          return true;
+        }
       }
     }
+  }
+
+  function findHitAsteroid() {
+    // asteroid whose left position is closest to bullet's
+    // or replace asteroid width with each individual asteroid left position
   }
 
 
