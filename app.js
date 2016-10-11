@@ -92,6 +92,10 @@ $(function() {
   }
 
   function isCollision() {
+    // sources for help + inspiration on collision detection logic: http://stackoverflow.com/questions/4230029/jquery-javascript-collision-detection
+
+    // https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+
     // asteroid height + width properties
     for (var i = 0; i < $('.asteroid').length; i++) {
       var asteroidHeightBeginning = $('.asteroid').eq(i).offset().top;
