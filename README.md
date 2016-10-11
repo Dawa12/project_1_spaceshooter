@@ -11,3 +11,11 @@ https://www.mint.com/
 
 # Game Screenshot
 ![alt tag](https://github.com/Dawa12/project_1_spaceshooter/blob/master/assets/game_snapshot.png)
+
+
+Slideshow which includes:
+*Includes project planning
+*Programming problems
+*Future implementations
+
+https://docs.google.com/presentation/d/1t6FEcRYDFBp129cmkZE54AZjPNuctfUPPSi2ty16bj8/edit?usp=sharing
