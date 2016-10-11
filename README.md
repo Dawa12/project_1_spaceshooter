@@ -14,8 +14,8 @@ https://www.mint.com/
 
 
 Slideshow which includes:
-*Includes project planning
-*Programming problems
-*Future implementations
+* Includes project planning
+* Programming problems
+* Future implementations
 
 https://docs.google.com/presentation/d/1t6FEcRYDFBp129cmkZE54AZjPNuctfUPPSi2ty16bj8/edit?usp=sharing
