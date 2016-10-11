@@ -6,5 +6,8 @@ https://www.mint.com/
 
 ![alt tag](http://i.imgur.com/tsbrio9.png)
   
-![alt tag](https://github.com/Dawa12/project_1_spaceshooter/blob/master/assets/game_snapshot.png)
+# Wireframe Design
 ![alt tag](https://github.com/Dawa12/project_1_spaceshooter/blob/master/assets/wireframe.png)
+
+# Game Screenshot
+![alt tag](https://github.com/Dawa12/project_1_spaceshooter/blob/master/assets/game_snapshot.png)
