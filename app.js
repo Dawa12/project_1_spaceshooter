@@ -1,3 +1,29 @@
+
+class Asteroid {
+  constructor(element, i) {
+    this.element = element;
+    this.isMovingRight = true;
+    this.leftPosition = 50 + i * 150;
+  }
+
+  reverseDirection() {
+    this.isMovingRight = !this.isMovingRight;
+  }
+
+  step() {
+    console.log(this);
+
+    if (this.isMovingRight) {
+      this.leftPosition += 10;
+      this.element.css('left', this.leftPosition + 'px');
+      console.log(this.leftPosition + 'px');
+    } else {
+      this.element.css("left", "-=10px");
+      this.leftPosition -= 10;
+    }
+  }
+}
+
 $(function() {
   console.log('dom loaded');
 
@@ -16,13 +42,14 @@ $(function() {
     var isMovingRight = true;
     var $leftBorder = 0;
     var $rightBorder = window.innerWidth - 50;
+    var $asteroidsArray = createAsteroidObjects();
+
 
     setInterval(moveAsteroid, 50);
-    setInterval(shootBullet, 50);
-    setInterval(destroyBullet, 10);
-    setInterval(isCollision, 10);
+    // setInterval(shootBullet, 50);
+    // setInterval(destroyBullet, 10);
+    // setInterval(isCollision, 10);
 
-    var $asteroidsArray = createAsteroidObjects();
   };
 
 // <<<<------------------- Functions ------------------->>>>
@@ -35,7 +62,7 @@ $(function() {
   }
 
   function insertPlayerName() {
-    $('#insertName').text(getPlayerName())
+    $('#insertName').text(getPlayerName());
   }
 
   function spaceTheAsteroids() {
@@ -49,15 +76,15 @@ $(function() {
   function createAsteroidObjects() {
     $arrayOfAsteroids = [];
     for (var i = 0; i < $('.asteroid').length; i++) {
-      $arrayOfAsteroids.push({'element': $asteroid[i], 'isMovingRight': true});
+      $arrayOfAsteroids.push(new Asteroid($('.asteroid').eq(i), i));
     }
     return $arrayOfAsteroids;
   }
 
   function calculateAsteroidPosition() {
     // cannot create a new $asteroid but need to get existing positions therefore must not operate offset on $asteroid but directly on $('.asteroid')
-    for (var i = 0; i < $('.asteroid').length; i++) {
-      $asteroidsArray[i].leftPosition = $('.asteroid').eq(i).offset().left;
+    for (var i = 0; i < $asteroidsArray.length; i++) {
+      // $asteroidsArray[i].leftPosition = $('.asteroid').eq(i).offset().left;
     }
     return $asteroidsArray;
   }
@@ -66,8 +93,9 @@ $(function() {
     // using parseFloat to remove 'px' from $asteroidPosition for comparison with borders
     calculateAsteroidPosition();
     for (var i = 0; i < $asteroidsArray.length; i++) {
-      if (parseFloat($asteroidsArray[i].leftPosition) > $rightBorder || parseFloat($asteroidsArray[i].leftPosition) <= $leftBorder) {
-          $asteroidsArray[i].isMovingRight = !$asteroidsArray[i].isMovingRight;
+      if (parseFloat($asteroidsArray[i].leftPosition) > $rightBorder || parseFloat($asteroidsArray[i].leftPosition) < $leftBorder) {
+        console.log('hi')
+          $asteroidsArray[i].reverseDirection();
       }
     }
 
@@ -81,13 +109,7 @@ $(function() {
     isCorner();
 
     for (var i = 0; i < $asteroidsArray.length; i++) {
-      if ($asteroidsArray[i].isMovingRight) {
-        $('.asteroid').eq(i).css("left", "+=10px");
-        $asteroidsArray[i].leftPosition += 10;
-      } else {
-        $('.asteroid').eq(i).css("left", "-=10px");
-        $asteroidsArray[i].leftPosition -= 10;
-      }
+      $asteroidsArray[i].step();
     }
   }
 
